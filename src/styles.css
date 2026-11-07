@@ -1,2 +1,10 @@
 @import "tailwindcss";
 @import "tailwind-animations";
+
+@theme {
+    --color-blue-extralight: #60a5fa;
+    --color-blue-light: #3b82f6;
+    --color-blue-dark: #2563eb;   
+    --color-sidebar: #0d0d15;
+    --color-dark: #09090f;   
+}
