@@ -7,4 +7,24 @@
     --color-blue-dark: #2563eb;   
     --color-sidebar: #0d0d15;
     --color-dark: #09090f;   
+
+
+}
+
+/* styles.css o index.css */
+:root {
+  --swiper-navigation-color: #8b5cf6; /* El color violeta de tu tema (violet-500) */
+  --swiper-navigation-size: 20px;     /* Tamaño de los íconos de las flechas */
+}
+
+/* Opcional: Si quieres personalizar el fondo de la flecha al pasar el mouse */
+.swiper-button-next,
+.swiper-button-last,
+.swiper-button-prev {
+  transition: all 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  transform: scale(1.1);
 }

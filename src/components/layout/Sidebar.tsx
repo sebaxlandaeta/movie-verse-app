@@ -1,13 +1,7 @@
-import { House, Clapperboard, Tv, Clock, Film } from "lucide-react";
+import { Film } from "lucide-react";
+import { sidebarItems } from "../../constants/movie-constants";
 
 export default function Sidebar() {
-  const items = [
-    { text: "Inicio", icon: <House size={18} /> },
-    { text: "Películas", icon: <Clapperboard size={18} /> },
-    { text: "Series TV", icon: <Tv size={18} /> },
-    { text: "Próximos Estrenos", icon: <Clock size={18} /> },
-  ];
-
   return (
     <aside className="fixed left-0 top-0 z-50 hidden h-screen w-64 shrink-0 flex-col border-r border-white/5 bg-sidebar px-6 py-8 lg:flex">
       <div className="mb-12 flex items-center gap-3">
@@ -25,16 +19,21 @@ export default function Sidebar() {
         </p>
 
         <nav className="space-y-2">
-          {items.map((item) => (
-            <a
-              key={item.text}
-              href="#"
-              className="flex items-center gap-3 rounded-xl px-2 py-3 transition text-gray-400 hover:bg-white/5 hover:text-white focus:text-blue-extralight focus:bg-blue-dark/15 focus:font-semibold"
-            >
-              <span className="text-xl">{item.icon}</span>
-              {item.text}
-            </a>
-          ))}
+          {sidebarItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <a
+                key={item.text}
+                href="#"
+                className="flex items-center gap-3 rounded-xl px-2 py-3 transition text-gray-400 hover:bg-white/5 hover:text-white focus:text-blue-extralight focus:bg-blue-dark/15 focus:font-semibold"
+              >
+                <span className="text-xl">
+                  <Icon size={18} />
+                </span>
+                {item.text}
+              </a>
+            );
+          })}
         </nav>
       </div>
 
