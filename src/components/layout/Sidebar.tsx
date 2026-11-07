@@ -1,6 +1,6 @@
 import { House, Clapperboard, Tv, Clock, Film } from "lucide-react";
 
-export function Sidebar() {
+export default function Sidebar() {
   const items = [
     { text: "Inicio", icon: <House size={18} /> },
     { text: "Películas", icon: <Clapperboard size={18} /> },
