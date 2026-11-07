@@ -31,7 +31,6 @@ export function CategorySection() {
                 >
                   <IconComponent className="w-6 h-6 transition-transform duration-300 group-hover:rotate-6" />
                 </div>
-                ``
                 <div className="mt-6 flex items-center justify-between">
                   <h3 className="font-medium tracking-wide text-gray-200 group-hover:text-white transition-colors">
                     {category.name}
