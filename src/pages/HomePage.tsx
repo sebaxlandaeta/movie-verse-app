@@ -4,36 +4,33 @@ import MainLayout from "../components/layout/MainLayout";
 import HeroSection from "../components/home/HeroSection";
 import { CategorySection } from "../components/home/CategorySection";
 import { MovieCarousel } from "../components/movie/MovieCarousel";
-
 import { useFetch } from "../hooks/useFetch";
+import StartLoader from "../components/iu/StartLoader";
+
 import {
   getTrendingMovies,
   getPopularMovies,
   getTopRatedMovies,
   getUpcomingMovies,
 } from "../services/movie-services";
+import {
+  getPopularTVShows,
+  getTopRatedTVShows,
+  getTrendingTVShows,
+  getUpcomingTVShows,
+} from "../services/tv-services";
 import type { Movie } from "../interfaces/tmdb";
 
 export default function HomePage() {
   const {
     data: trendingData,
-    loading: loadingTrending,
-    error: errorTrending,
-  } = useFetch(getTrendingMovies);
-  const { data: popularMovies } = useFetch(getPopularMovies);
-  const { data: topRatedMovies } = useFetch(getTopRatedMovies);
-  const { data: upcomingMovies } = useFetch(getUpcomingMovies);
+    loading,
+    error,
+  } = useFetch(() => getTrendingMovies(1));
 
-  if (loadingTrending)
-    return (
-      <div className="min-h-screen bg-[#171522] text-white flex items-center justify-center">
-        <p className="text-violet-500 font-semibold animate-pulse text-lg">
-          Cargando MovieVerse...
-        </p>
-      </div>
-    );
+  if (loading) return <StartLoader />;
 
-  if (errorTrending || !trendingData)
+  if (error || !trendingData)
     return (
       <div className="min-h-screen bg-[#171522] text-white flex items-center justify-center">
         <p className="text-red-400 font-semibold">
@@ -51,38 +48,53 @@ export default function HomePage() {
         <MainLayout>
           <Header />
           <div className="px-5 py-8 md:px-10">
-            {/* Hero dinámico con la película destacada */}
             <HeroSection movie={featuredMovie} />
-
-            {/* Categorías (Géneros) */}
             <CategorySection />
 
-            {/* Carrusel: En Tendencia */}
             <MovieCarousel
               subtag="Lo más visto"
-              title="En tendencia"
-              movies={trendingData || []}
+              title="Peliculas en tendencia"
+              fetchService={getTrendingMovies}
             />
 
-            {/* Carrusel: Películas Populares */}
             <MovieCarousel
               subtag="Descubre lo más popular"
               title="Películas populares"
-              movies={popularMovies || []}
+              fetchService={getPopularMovies}
             />
 
-            {/* Carrusel: Las mejor valoradas */}
             <MovieCarousel
               subtag="Selección especial"
-              title="Las mejor valoradas"
-              movies={topRatedMovies || []}
+              title="Peliculas mejor valoradas"
+              fetchService={getTopRatedMovies}
             />
 
-            {/* Carrusel: Próximos estrenos */}
             <MovieCarousel
               subtag="Próximamente"
               title="Próximos estrenos"
-              movies={upcomingMovies || []}
+              fetchService={getUpcomingMovies}
+            />
+
+            <MovieCarousel
+              subtag="Lo más visto"
+              title="Series en tendencia"
+              fetchService={getTrendingTVShows}
+            />
+
+            <MovieCarousel
+              subtag="Descubre lo mas popular"
+              title="Series Populares"
+              fetchService={getPopularTVShows}
+            />
+            <MovieCarousel
+              subtag="Sección especial"
+              title="Series mejor valoradas"
+              fetchService={getTopRatedTVShows}
+            />
+            <MovieCarousel
+              subtag="Proximamente"
+              title="Series proximas a estrenar"
+              fetchService={getUpcomingTVShows}
             />
           </div>
         </MainLayout>

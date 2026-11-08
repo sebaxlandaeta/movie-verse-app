@@ -18,7 +18,7 @@ export default function Sidebar() {
           MENÚ PRINCIPAL
         </p>
 
-        <nav className="space-y-2">
+        <nav className="space-y-2 zoom-in">
           {sidebarItems.map((item) => {
             const Icon = item.icon;
             return (

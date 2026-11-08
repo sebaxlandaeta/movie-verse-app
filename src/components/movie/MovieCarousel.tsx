@@ -3,18 +3,32 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { MovieCard } from "./MovieCard";
+import { usePaginatedFetch } from "../../hooks/usePaginatedFetch";
 import type { Movie } from "../../interfaces/tmdb";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 
-interface MovieCarouselProps {
+interface MovieCarouselProps<T> {
   subtag?: string;
   title: string;
-  movies: Movie[];
+  fetchService: (page: number) => Promise<T[]>;
 }
 
-export function MovieCarousel({ subtag, title, movies }: MovieCarouselProps) {
+export function MovieCarousel<T>({
+  subtag,
+  title,
+  fetchService,
+}: MovieCarouselProps<T>) {
   const swiperRef = useRef<SwiperType | null>(null);
+
+  const {
+    movies: items,
+    loadMore,
+    isLoading,
+    hasMore,
+  } = usePaginatedFetch({
+    fetchService,
+  });
 
   return (
     <section className="mb-12">
@@ -31,7 +45,7 @@ export function MovieCarousel({ subtag, title, movies }: MovieCarouselProps) {
         <div className="flex items-center gap-2">
           <button
             onClick={() => swiperRef.current?.slidePrev()}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-all hover:bg-blue-dark hover:border-blue-darbg-blue-dark active:scale-95 cursor-pointer"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-all hover:bg-blue-dark hover:border-blue-dark active:scale-95 cursor-pointer"
             aria-label="Anterior"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -39,7 +53,7 @@ export function MovieCarousel({ subtag, title, movies }: MovieCarouselProps) {
 
           <button
             onClick={() => swiperRef.current?.slideNext()}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-all hover:bg-blue-dark hover:border-blue-darbg-blue-dark active:scale-95 cursor-pointer"
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white transition-all hover:bg-blue-dark hover:border-blue-dark active:scale-95 cursor-pointer"
             aria-label="Siguiente"
           >
             <ChevronRight className="h-5 w-5" />
@@ -50,6 +64,18 @@ export function MovieCarousel({ subtag, title, movies }: MovieCarouselProps) {
       <Swiper
         modules={[Navigation]}
         onSwiper={(swiper) => (swiperRef.current = swiper)}
+        onSlideChange={(swiper) => {
+          const slidesPerView =
+            typeof swiper.params.slidesPerView === "number"
+              ? swiper.params.slidesPerView
+              : 1;
+          const isNearEnd =
+            swiper.activeIndex >= swiper.slides.length - slidesPerView - 3;
+
+          if (isNearEnd && hasMore && !isLoading) {
+            loadMore();
+          }
+        }}
         spaceBetween={20}
         slidesPerView={2}
         breakpoints={{
@@ -59,11 +85,17 @@ export function MovieCarousel({ subtag, title, movies }: MovieCarouselProps) {
         }}
         className="w-full pb-4"
       >
-        {movies?.map((movie, index) => (
-          <SwiperSlide key={movie.id || index}>
-            <MovieCard movie={movie} />
+        {items?.map((item, index) => (
+          <SwiperSlide key={`item-${index}`}>
+            <MovieCard movie={item as unknown as Movie} />
           </SwiperSlide>
         ))}
+
+        {isLoading && (
+          <SwiperSlide className="flex items-center justify-center text-violet-400 text-sm font-medium">
+            Cargando...
+          </SwiperSlide>
+        )}
       </Swiper>
     </section>
   );

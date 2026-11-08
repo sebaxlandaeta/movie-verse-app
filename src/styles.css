@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "tailwind-animations";
+
 
 @theme {
     --color-blue-extralight: #60a5fa;
@@ -9,6 +9,43 @@
     --color-dark: #09090f;   
 
 
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2. Efecto brillo / shimmer para carga de elementos */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Clases de utilidad reutilizables */
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Opcional: suavizar el desplazamiento global si lo deseas */
+html {
+  scroll-behavior: smooth;
 }
 
 /* styles.css o index.css */
